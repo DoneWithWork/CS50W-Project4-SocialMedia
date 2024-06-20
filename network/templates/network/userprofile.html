@@ -1,0 +1,83 @@
+{% extends "network/layout.html" %} 
+{% load static %}
+{% block body %} 
+<head>
+    <title>{{username}}'s Profile</title>
+    <script src="{% static 'network/like.js' %}" defer></script>
+
+</head>
+<div class="container">
+  
+<h1>User Profile</h1>
+<div class="stats">
+    <div class="following">Following: {{following}}</div>
+    <div class="followers">Followers: {{followers}}</div>
+    <div class="posts">Posts: {{post_count}}</div>
+</div>
+<div class="follow">
+  {% if is_user == False %}
+ 
+  <form method="post" action="{% url 'follow' username %}">
+    {% csrf_token %}
+    {% if is_following   %}
+    <input type="submit" value="Unfollow">
+    {% else %}
+    <input type="submit" value="Follow">
+    {% endif %}
+  </form>
+
+  
+  {% endif %}
+   
+</div>
+<div class="posts">
+    {% for post in pages %}
+      <div class="post">
+        <div class="user"><a href="{% url 'userprofile' post.user.username %}">{{post.user}}</a></div>
+        <div class="date">{{post.timestamp|timesince}}</div>
+        <div class="message" id="content-{{post.id}}">{{post.content}}</div>
+
+        <form id="like-form" method="post" onsubmit="like(event)">
+          {% csrf_token %}
+          <div class="likes-count" id="likes-count"><p>Likes: {{ post.likes.count }}</p></div>
+          <input type="hidden" name="post_id" value="{{ post.id }}">
+          <input type="submit" value="{% if request.user in post.likes.all %}Unlike{% else %}Like{% endif %}">
+    </form>
+      </div>
+      
+      {% if request.user.id == post.user.id %}
+  <button id="edit-button" data-postId="{{post.id}}" onclick="edit(event)">Edit</button>
+  {% endif %}
+  <form class="edit" method="post" onsubmit="EditPost(event)">
+    {% csrf_token %}
+    {% if request.user.id == post.user.id %}
+      <input type="hidden" name="post_id" value="{{ post.id }}">
+        <div id="edit-content-{{post.id}}" style="display: none; width: 100%; ">
+          <textarea  name="content" >{{post.content}}</textarea>
+          <input type="submit" value="Save" style="display: block;">
+        </div>
+        
+        {% endif %}
+</form>
+    {% endfor %}
+  </div>
+  
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+     
+   
+{% if pages.has_previous %}
+<li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+<li class="page-item"><a class="page-link" href="?page={{pages.previous_page_number}}">Previous</a></li>
+{% endif %}
+
+<li class="page-item disabled"><a href="#" class="page-link">Page {{pages.number}} of {{ pages.paginator.num_pages }}</a></li>
+
+{% if pages.has_next %}
+<li class="page-item"><a class="page-link" href="?page={{pages.next_page_number}}">next</a></li>
+<li class="page-item"><a class="page-link" href="?page={{pages.paginator.num_pages}}">Last &raquo;</a></li>
+{% endif %}
+</ul>
+</nav>
+</div>
+{% endblock %}

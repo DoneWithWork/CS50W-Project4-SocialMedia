@@ -1,0 +1,55 @@
+.form-control {
+  display: block;
+}
+textarea{
+  display: block;
+}
+label{
+  font-weight: 500;
+  font-size: 20px;
+}
+h1{
+  font-weight:bold;
+  font-size: 25px;
+  margin: 10px 20px;
+}
+.container{
+  max-width: 1400px;
+  margin: 0 auto;
+}
+button, input{
+  margin-top: 10px;
+  border: none;
+  background-color: lightblue;
+  padding: 5px 15px;
+  border-radius: 5px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+button:hover,input:hover{
+  background-color: rgb(113, 192, 219);
+}
+button:active,input:active{
+  background-color: rgb(113, 192, 219);
+}
+.post {
+  border: 1px solid black;
+  border-radius: 5px;
+  margin: 20px 0;
+  padding: 20px 20px;
+}
+.date{
+  font-size: 14px;
+  font-weight: 400;
+  color: grey;
+}
+.user{
+  font-size: 16px;
+  font-weight: 500;
+}
+.message{
+  font-weight: 700;
+}
+.pagination{
+  margin: 20px 0;
+}
